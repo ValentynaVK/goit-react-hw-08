@@ -11,7 +11,7 @@ const RegistrationSchema = Yup.object().shape({
     .max(50, "Too long")
     .required("This field is required"),
   email: Yup.string().email("Invalid email").required("This field is required"),
-  password: Yup.string().min(6, "Too short").required("This field is required"),
+  password: Yup.string().min(7, "Too short").required("This field is required"),
 });
 
 const initialValues = {
@@ -24,7 +24,13 @@ export default function RegistrationForm() {
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    dispatch(register(values))
+    const payload = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    };
+
+    dispatch(register(payload))
       .unwrap()
       .then(() => {
         toast.success("You have successfully registered!");
@@ -32,7 +38,7 @@ export default function RegistrationForm() {
       })
       .catch((error) => {
         toast.error("Something went wrong, please try again.");
-        console.error("Registration failed:", error.message);
+        console.error("Registration failed:", error);
       });
   };
 
